@@ -165,8 +165,19 @@ DEF_GFX_PROP_I(Tilemap, OY)
 DEF_GFX_PROP_I(Tilemap, Opacity)
 DEF_GFX_PROP_I(Tilemap, BlendType)
 
-void tilemapBindingInit() {
-    VALUE klass = rb_define_class("TilemapAutotiles", rb_cObject);
+void tilemapBindingInit(bool foreign) {
+    const char* tilemap_autotiles_name;
+    const char* tilemap_name;
+    
+    if (foreign) {
+      tilemap_autotiles_name = "TilemapAutotiles_XP";
+      tilemap_name = "Tilemap_XP";
+    } else {
+      tilemap_autotiles_name = "TilemapAutotiles";
+      tilemap_name = "Tilemap";
+    }
+    
+    VALUE klass = rb_define_class(tilemap_autotiles_name, rb_cObject);
 #if RAPI_FULL > 187
     rb_define_alloc_func(klass, classAllocate<&TilemapAutotilesType>);
 #endif
@@ -174,7 +185,7 @@ void tilemapBindingInit() {
     _rb_define_method(klass, "[]=", tilemapAutotilesSet);
     _rb_define_method(klass, "[]", tilemapAutotilesGet);
     
-    klass = rb_define_class("Tilemap", rb_cObject);
+    klass = rb_define_class(tilemap_name, rb_cObject);
 #if RAPI_FULL > 187
     rb_define_alloc_func(klass, classAllocate<&TilemapType>);
 #else
@@ -201,4 +212,8 @@ void tilemapBindingInit() {
     INIT_PROP_BIND(Tilemap, BlendType, "blend_type");
     INIT_PROP_BIND(Tilemap, Color, "color");
     INIT_PROP_BIND(Tilemap, Tone, "tone");
+}
+
+void tilemapBindingInit() {
+  tilemapBindingInit(true);
 }

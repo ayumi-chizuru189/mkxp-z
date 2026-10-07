@@ -89,6 +89,7 @@ void spriteBindingInit();
 void viewportBindingInit();
 void planeBindingInit();
 void windowBindingInit();
+void tilemapBindingInit(bool foreign);
 void tilemapBindingInit();
 void windowVXBindingInit();
 void tilemapVXBindingInit();
@@ -174,6 +175,8 @@ static void mriBindingInit() {
         windowBindingInit();
         tilemapBindingInit();
     } else {
+        tilemapBindingInit(true);
+
         windowVXBindingInit();
         tilemapVXBindingInit();
     }
